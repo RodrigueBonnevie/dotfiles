@@ -6,16 +6,22 @@
 
 ### Necessary packages to install
 # sudo apt install playerctl
+# sudo apt install fuzzel
 
 ### Todo
-# Brightness
-# Battery in status bar
-# Bluetooth connectivity?
-# Screenshot
-# Launcher
+## General
+  # Bluetooth connectivity?
+  # Screenshot
+  # Notifications
+  # Autostart
+## Status bar
+  # Battery in status bar
+## Lockscreen
+## Idle
 
 ### Appearance
 set $blue #33ceff
+set $deep #335aff
 set $pink #ea33ff
 set $green #46ff33
 set $black #000000
@@ -23,24 +29,23 @@ set $red   #ff5050
 set $white #ffffff
 
 # Colors                border   bg       text     indi     childborder
-client.focused          $blue    $blue    $black   $red     $blue
+client.focused          $blue    $blue    $black   $deep     $blue
 
 # Font
 font pango:Sans 8
 
 # Border size
-default_border pixel 3
+default_border pixel 4
 
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
-# Your preferred terminal emulator
-set $term foot
+
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | wmenu | xargs swaymsg exec --
+set $menu fuzzel | xargs swaymsg exec --
 
 include /etc/sway/config-vars.d/*
 
@@ -74,13 +79,16 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 input type:keyboard {
 	xkb_layout se
 }
-	
+
 ### Key bindings
 #
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec $term
+    bindsym $mod+Return exec terminator
+
+    # Start firefox
+    bindsym $mod+b exec firefox
 
     # Kill focused window
     bindsym $mod+Shift+q kill
@@ -147,10 +155,10 @@ input type:keyboard {
 # Layout stuff:
 #
     # You can "split" the current object of your focus with
-    # $mod+b or $mod+v, for horizontal and vertical splits
-    # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    # $mod+h or $mod+v, for horizontal and vertical splits
+    # respectively. Swapped to match Doom Emacs
+    bindsym $mod+h splitv
+    bindsym $mod+v splith
 
     # Switch the current container between different layout styles
     bindsym $mod+w layout tabbed
@@ -209,22 +217,9 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-#
-# Status Bar:
-#
-# Read `man 5 sway-bar` for more information about this section.
+# Status Bar: waybar
 bar {
-    position top
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
+  swaybar_command waybar
 }
 
 include /etc/sway/config.d/*
