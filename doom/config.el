@@ -33,14 +33,71 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-moonlight)
+(setq doom-font (font-spec :size 13))
+
+(when (display-graphic-p)
+  (toggle-frame-maximized)
+
+  (custom-theme-set-faces! 'doom-moonlight
+    '(line-number :foreground "gray")
+    '(mode-line-inactive :background "dim gray" :foreground "black" :height 80)
+    '(mode-line :background "dim gray" :height 80)
+    '(vertico-group-title :foreground  "gray")
+    )
+  )
+
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/org/")
+
+
+
+;;;;;;;;; Custom Settings ;;;;;;;;;
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+;; Switch to the new window after splitting.
+(setq evil-split-window-below t)
+(setq evil-vsplit-window-right t)
+
+;; Do not continue to comment new lines when o/O from a commented line.
+(setq +evil-want-o/O-to-continue-comments nil)
+
+(setq auto-save-default nil)
+;; When ideling save after this amount of seconds
+;;(setq auto-save-timeout 10)
+;;(setq auto-save-visited-mode)
+
+;; Super save package, allows saving on focus change
+;;(super-save-mode +1)
+;;(setq super-save-delete-trailing-whitespace t)
+;;(setq super-save-auto-save-when-idle t)
+;;(setq super-save-all-buffers t)
+
+;;; :lang rust
+(setq
+ lsp-inlay-hint-enable t
+ lsp-rust-analyzer-cargo-watch-command "clippy"
+ lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial"
+ lsp-rust-analyzer-display-chaining-hints t
+ lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil
+ lsp-rust-analyzer-display-closure-return-type-hints t
+ lsp-rust-analyzer-display-parameter-hints nil
+ lsp-rust-analyzer-display-reborrow-hints nil
+ lsp-rust-analyzer-display-inlay-hints t
+ lsp-enable-file-watchers t
+ lsp-file-watch-threshold 2000
+ lsp-auto-execute-action nil
+ )
+
+;; Do not format on save in the following modes.
+(after! format
+  (setq +format-on-save-disabled-modes
+        '(python-mode
+          cmake-mode
+          yaml-mode)))
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an

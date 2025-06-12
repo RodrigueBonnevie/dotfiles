@@ -21,22 +21,26 @@
 
 
 ### Appearance
+set $mauve #c6a0f6
+set $sapphire #7dc4e4
+set $green #a6da95
+set $sky #91d7e3
 set $blue #33ceff
 set $deep #335aff
 set $pink #ea33ff
 set $green #46ff33
 set $black #000000
-set $red   #ff5050  
+set $red   #ff5050
 set $white #ffffff
 
 # Colors                border   bg       text     indi     childborder
-client.focused          $blue    $blue    $black   $deep     $blue
+client.focused          $blue    $blue    $black   $sky     $sapphire
 
 # Font
 font pango:Sans 8
 
 # Border size
-default_border pixel 4
+default_border pixel 3
 
 ### Variables
 #
@@ -63,7 +67,7 @@ output * bg /usr/share/backgrounds/warty-final-ubuntu.png fill
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
 ### Idle and lock configuration
-set $lock_screen swaylock -f -e -i ~/Downloads/fancy_numbat.jpg
+set $lock_screen swaylock -f -e -i /usr/share/backgrounds/warty-final-ubuntu.png
 bindsym $Super+l exec $lock_screen
 exec swayidle -w \ timeout 900 $lock_screen \
 
@@ -132,10 +136,8 @@ input type:keyboard {
 # Workspaces:
 #
     # Switch to workspace
-    set $ws1 "1 Home"
-    bindsym $Super+1 workspace $ws1
-    set $ws2 "2 Doom"
-    bindsym $Super+2 workspace $ws2
+    bindsym $Super+1 workspace number 1
+    bindsym $Super+2 workspace number 2
     bindsym $Super+3 workspace number 3
     bindsym $Super+4 workspace number 4
     bindsym $Super+5 workspace number 5
@@ -146,8 +148,8 @@ input type:keyboard {
     bindsym $Super+0 workspace number 10
 
     # Move focused container to workspace
-    bindsym $Super+Ctrl+1 move container to workspace $ws1
-    bindsym $Super+Ctrl+2 move container to workspace $ws2
+    bindsym $Super+Ctrl+1 move container to workspace number 1
+    bindsym $Super+Ctrl+2 move container to workspace number 2
     bindsym $Super+Ctrl+3 move container to workspace number 3
     bindsym $Super+Ctrl+4 move container to workspace number 4
     bindsym $Super+Ctrl+5 move container to workspace number 5
@@ -158,10 +160,10 @@ input type:keyboard {
     bindsym $Super+Ctrl+0 move container to workspace number 10
 
 ### Autostart applications
-    exec swaymsg workspace $ws1; exec terminator;
-    exec swaymsg workspace $ws1; exec firefox;
-    exec swaymsg workspace $ws2; exec emacs;
-    exec swaymsg workspace $ws2; exec slack;
+    exec swaymsg workspace 1; exec terminator;
+    exec swaymsg workspace 3; exec emacs;
+    exec swaymsg workspace 2; exec firefox;
+    exec swaymsg workspace 2; exec slack;
 
 
 
@@ -175,7 +177,7 @@ input type:keyboard {
     bindsym $Super+v splith
 
     # Switch the current container between different layout styles
-    bindsym $Super+w layout tabbed
+    bindsym $Super+t layout tabbed
     bindsym $Super+s layout toggle split
 
     # Make the current focus fullscreen
@@ -191,7 +193,7 @@ input type:keyboard {
     bindsym $Super+a focus parent
 
     ## Media keys
-	bindsym XF86AudioRaiseVolume exec amixer set Master 5%+ 
+	bindsym XF86AudioRaiseVolume exec amixer set Master 5%+
 	bindsym XF86AudioLowerVolume exec amixer set Master 5%-
 	bindsym XF86AudioMute exec amixer set Master toggle
 	bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
@@ -230,6 +232,29 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $Super+r mode "resize"
+
+# Screen modes. Note mirroring is not yet properly supported by sway :(
+set $mode_display Aux screen: (l) left (r) right (o) off (m) mirror
+mode "$mode_display" {
+    bindsym l output $scr_aux enable, output $scr_main pos 0 0, output $scr_aux pos -$native_width 0, mode "default"
+    bindsym r output $scr_aux enable, output $scr_main pos 0 0, output $scr_aux pos $native_width 0, mode "default"
+    bindsym m output $scr_aux enable, output $scr_main pos 0 0, output $scr_aux pos 0 0, mode "default"
+    bindsym o output $scr_aux disable, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $Super+d mode "$mode_display"
+
+# Work setup
+output eDP-1 pos 0 0
+output DP-5 pos "960" "-1440"
+output DP-6 pos "-1600" "-1440"
+# output DP-5 pos 0 "-1440"
+# output DP-6 pos "-1440" "-2500" transform 90
+workspace 2 output DP-5
+workspace 3 output DP-6
 
 # Status Bar: waybar
 bar {

@@ -48,3 +48,7 @@
 ;; (unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
+
+;; For save on focus change
+(package! super-save)
+(package! protobuf-mode)
